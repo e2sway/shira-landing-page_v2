@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymEgzVJQiShp-7VzL47bA789cYBcbElHvyj3qAyRLU_VfvRm8CpLfClz7WkqJkQlte/exec'
+// Update this URL with your working web app URL.
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7e5nht7jX2Xh9Gv4NvVBymi2AvKMei6uUjqcMml0QWSRwRHsGMc_7tIB881Qccbkd/exec'
 
 interface SubmissionResponse {
   success: boolean;
@@ -53,15 +54,14 @@ export function useEmailSubmission() {
 
       const response = await fetch(url.toString(), {
         method: 'GET',
-        mode: 'cors',
         headers: {
           'Accept': 'application/json',
         },
       })
 
-      // Since we might not get JSON back due to CORS, we'll check if the URL was hit
-      if (response.status === 0 || response.type === 'opaque') {
-        // Assume success if we got any response
+      const data: SubmissionResponse = await response.json()
+      
+      if (data.success) {
         toast.success('Successfully joined the waitlist!', {
           duration: 5000,
           style: {
@@ -75,46 +75,19 @@ export function useEmailSubmission() {
           },
         })
         return true
-      }
-
-      try {
-        const data: SubmissionResponse = await response.json()
-        if (data.success) {
-          toast.success('Successfully joined the waitlist!', {
-            duration: 5000,
-            style: {
-              background: '#282828',
-              color: '#fff',
-              border: '1px solid #3d3d3d',
-            },
-            iconTheme: {
-              primary: '#8A80F9',
-              secondary: '#282828',
-            },
-          })
-          return true
-        } else {
-          const errorMessage = data.message === 'Email already registered' 
-            ? 'This email is already on the waitlist!'
-            : 'Failed to join waitlist. Please try again.'
-          
-          toast.error(errorMessage, {
-            style: {
-              background: '#282828',
-              color: '#fff',
-              border: '1px solid #3d3d3d',
-            },
-            iconTheme: {
-              primary: '#8A80F9',
-              secondary: '#282828',
-            },
-          })
-          return false
+      } else {
+        // Handle specific error messages from the server
+        let errorMessage = 'Failed to join waitlist. Please try again.'
+        
+        if (data.message === 'Email already registered') {
+          errorMessage = 'This email is already on the waitlist!'
+        } else if (data.message === 'Invalid email format') {
+          errorMessage = 'Please enter a valid email address.'
+        } else if (data.message === 'No email provided.') {
+          errorMessage = 'Please enter your email address.'
         }
-      } catch (jsonError) {
-        // If we can't parse JSON but got a response, assume success
-        toast.success('Successfully joined the waitlist!', {
-          duration: 5000,
+        
+        toast.error(errorMessage, {
           style: {
             background: '#282828',
             color: '#fff',
@@ -125,7 +98,7 @@ export function useEmailSubmission() {
             secondary: '#282828',
           },
         })
-        return true
+        return false
       }
     } catch (error) {
       console.error('Error submitting email:', error)
@@ -147,4 +120,4 @@ export function useEmailSubmission() {
   }
 
   return { submitEmail, isLoading }
-} 
+}
