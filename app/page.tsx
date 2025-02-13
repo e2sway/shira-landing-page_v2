@@ -20,10 +20,10 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-[#181818]">
       <Toaster position="top-center" />
       {/* Hero Section */}
-      <section className="py-8 relative flex items-center justify-center min-h-[90vh] px-4 bg-[#181818]">
+      <section className="relative flex items-center justify-center min-h-screen px-4 pt-safe pb-8">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(138,128,249,0.1),transparent)] z-0" />
         
         <div className="relative z-10 max-w-[95vw] mx-auto">
@@ -73,7 +73,7 @@ export default function Home() {
 
       {/* Key Benefits Section */}
       <section className="py-16 bg-[#181818]">
-        <div className="max-w-[90vw] mx-auto px-4">
+        <div className="max-w-[90vw] mx-auto px-4 px-safe">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
               <span className="text-sm font-semibold text-[#CFCFCF] mb-2 block">FEATURES & BENEFITS</span>
@@ -141,7 +141,7 @@ export default function Home() {
 
       {/* Final CTA */}
       <section className="py-24 bg-[#181818] border-t border-[#282828]">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+        <div className="max-w-4xl mx-auto px-4 px-safe text-center">
           <span className="text-sm font-semibold text-[#CFCFCF] mb-2 block">GET STARTED</span>
           <h2 className="text-3xl lg:text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#8A80F9] to-[#5A51E1]">
             Ready to Transform Your Language Learning?
