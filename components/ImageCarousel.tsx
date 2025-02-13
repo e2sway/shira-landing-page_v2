@@ -4,11 +4,11 @@ import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const images = [
+  '/assets/screenshot5.png',
   '/assets/screenshot1.png',
+  '/assets/screenshot4.png',
   '/assets/screenshot2.png',
   '/assets/screenshot3.png',
-  '/assets/screenshot4.png',
-  '/assets/screenshot5.png',
 ]
 
 export function ImageCarousel() {
@@ -17,19 +17,19 @@ export function ImageCarousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length)
-    }, 5000)
+    }, 4000)
     return () => clearInterval(timer)
   }, [])
 
   return (
-    <div className="relative w-full aspect-[9/16] max-w-[350px] mx-auto">
+    <div className="relative w-full h-full">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentIndex}
           initial={{ opacity: 0, x: 100 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -100 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.3 }}
           className="absolute inset-0"
         >
           <Image
