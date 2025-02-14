@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 
-const images = [
+const defaultImages = [
   '/assets/screenshot5.png',
   '/assets/screenshot1.png',
   '/assets/screenshot4.png',
@@ -11,15 +11,20 @@ const images = [
   '/assets/screenshot3.png',
 ]
 
-export function ImageCarousel() {
+interface ImageCarouselProps {
+  images?: string[]
+  interval?: number
+}
+
+export function ImageCarousel({ images = defaultImages, interval = 4000 }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length)
-    }, 4000)
+    }, interval)
     return () => clearInterval(timer)
-  }, [])
+  }, [images.length, interval])
 
   return (
     <div className="relative w-full h-full">
