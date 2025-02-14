@@ -9,11 +9,6 @@ import { GradientButton } from "@/components/ui/GradientButton"
 import { useEmailSubmission } from '@/lib/hooks/useEmailSubmission'
 import { Toaster } from 'react-hot-toast'
 
-const featureImages = [
-  '/assets/screenshot7.png',
-  '/assets/screenshot8.png',
-]
-
 export default function Home() {
   const [email, setEmail] = useState('')
   const { submitEmail, isLoading } = useEmailSubmission()
@@ -129,9 +124,13 @@ export default function Home() {
             <div className="relative">
               <PhoneMockup slideFrom="left">
                 <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
-                  <ImageCarousel 
-                    images={featureImages}
-                    interval={5000}
+                  <Image
+                    src="/assets/screenshot7.png"
+                    alt="App feature showcase"
+                    fill
+                    priority
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>
               </PhoneMockup>

@@ -6,7 +6,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Shira - Language Learning App',
+  title: 'Shira - Short Form Language Learning',
   description: 'Learn languages through bite-sized videos and AI conversations',
   icons: {
     icon: '/favicon.ico',
