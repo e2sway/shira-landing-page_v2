@@ -8,6 +8,9 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Shira - Language Learning App',
   description: 'Learn languages through bite-sized videos and AI conversations',
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({
