@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
+import { Footer } from '@/components/Footer'
 
 // Configure Inter font
 const inter = Inter({ subsets: ['latin'] })
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-[#181818] text-white antialiased`}>
         {children}
         <Analytics />
+        <Footer />
       </body>
     </html>
   )
