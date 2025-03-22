@@ -27,18 +27,28 @@ export default function Home() {
     setEmail('') // Clear the input on success
   }
 
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value)
+  }
+
   return (
-    <main className="min-h-screen bg-[#181818] overflow-x-hidden">
+    <main className="min-h-screen bg-[#0f0f13] overflow-x-hidden">
       <Toaster position="top-center" />
-      <DynamicBackground />
+      <DynamicBackground 
+        particleCount={80}
+        enableMeteors={true}
+        enableOrbs={true}
+        primaryColor="#8A80F9"
+        secondaryColor="#5A51E1"
+        accentColor="#9F97FF"
+      />
       
       {/* Hero Section */}
       <section className="relative flex items-center justify-center min-h-screen px-4 pt-16 md:pt-safe pb-8">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(138,128,249,0.1),transparent)] z-0" />
-        <div className="absolute inset-0 mesh-grid opacity-30 z-0" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(138,128,249,0.15),transparent)] z-0" />
         
-        <div className="relative z-10 max-w-[95vw] mx-auto">
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
+        <div className="relative z-10 max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
             
             {/* Phone mockup - now first */}
             <FadeInSection direction="right" delay={0.4}>
@@ -48,14 +58,17 @@ export default function Home() {
                   duration={6} 
                   className="group transition-transform duration-300 hover:scale-[1.02]"
                 >
-                  <PhoneMockup color="purple">
-                    <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
-                      <ImageCarousel 
-                        transitionType="zoom"
-                        interval={5000}
-                      />
-                    </div>
-                  </PhoneMockup>
+                  <div className="perspective-1500 relative">
+                    <div className="absolute -inset-4 bg-gradient-to-r from-[#8A80F9]/20 to-[#5A51E1]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
+                    <PhoneMockup color="purple">
+                      <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
+                        <ImageCarousel 
+                          transitionType="zoom"
+                          interval={5000}
+                        />
+                      </div>
+                    </PhoneMockup>
+                  </div>
                 </FloatingElement>
               </ParallaxContainer>
             </FadeInSection>
@@ -75,24 +88,29 @@ export default function Home() {
               
               {/* Email signup form */}
               <FadeInSection delay={0.6}>
-                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-xl">
-                  <GradientInput
-                    type="email"
-                    placeholder="Enter your email"
-                    aria-label="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    disabled={isLoading}
-                    icon={<Mail size={20} />}
-                    containerClassName="w-full"
-                  />
+                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 max-w-xl relative">
+                  <div className="absolute -inset-1 rounded-xl bg-gradient-to-r from-[#8A80F9]/20 via-[#5A51E1]/20 to-[#8A80F9]/20 blur-lg opacity-0 group-hover:opacity-70 transition-all duration-500" />
+                  <div className="w-full">
+                    <GradientInput
+                      type="email"
+                      placeholder="Enter your email"
+                      name="email" 
+                      className="w-full"
+                      icon={<Mail size={20} />}
+                    />
+                    <input 
+                      type="hidden" 
+                      value={email} 
+                      onChange={handleEmailChange} 
+                    />
+                  </div>
                   <GradientButton 
                     type="submit"
                     size="lg" 
                     className="w-full sm:min-w-[200px] h-14 px-10 text-lg font-bold rounded-xl"
                     disabled={isLoading}
                   >
-                    {isLoading ? 'Joining...' : 'Join the Waitlist'}
+                    {isLoading ? 'Joining...' : 'Join Waitlist'}
                     {!isLoading && <ChevronRight className="h-5 w-5" />}
                   </GradientButton>
                 </form>
@@ -104,23 +122,18 @@ export default function Home() {
       </section>
 
       {/* Key Benefits Section */}
-      <section className="py-16 bg-[#181818] relative">
-        <div className="absolute inset-0 mesh-grid opacity-20 z-0" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(138,128,249,0.08),transparent)] z-0" />
+      <section className="py-16 bg-[#0f0f13] relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(138,128,249,0.12),transparent)] z-0" />
         
-        <div className="max-w-[90vw] mx-auto px-4 px-safe relative z-10">
+        <div className="max-w-6xl mx-auto px-4 px-safe relative z-10">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <div className="space-y-10">
               <FadeInSection direction="up">
-                <span className="text-sm font-semibold text-[#CFCFCF] mb-2 block">FEATURES & BENEFITS</span>
-                <AnimatedText 
-                  text="Key Benefits"
-                  className="text-3xl font-bold mb-12 text-white leading-relaxed tracking-wide"
-                  delay={0.2}
-                />
+                <span className="text-sm font-semibold text-[#8A80F9] mb-2 block uppercase tracking-wide">FEATURES & BENEFITS</span>
+                <h2 className="text-4xl font-bold mb-12 gradient-text animate-text-shimmer">Key Benefits</h2>
               </FadeInSection>
               
-              <div className="space-y-6">
+              <div className="grid sm:grid-cols-2 gap-6">
                 <AnimatedFeature
                   icon={<MessageCircle className="w-6 h-6" />}
                   title="Learn through real-life conversations"
@@ -157,19 +170,24 @@ export default function Home() {
                   yOffset={15} 
                   duration={7}
                   rotateOffset={2}
+                  className="group transition-all duration-300"
                 >
-                  <PhoneMockup slideFrom="left" color="purple">
-                    <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
-                      <Image
-                        src="/assets/screenshot7.png"
-                        alt="App feature showcase"
-                        fill
-                        priority
-                        className="object-contain"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    </div>
-                  </PhoneMockup>
+                  <div className="perspective-1500 relative">
+                    <div className="absolute -inset-4 bg-gradient-to-r from-[#5A51E1]/20 to-[#8A80F9]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
+                    <PhoneMockup slideFrom="left" color="purple">
+                      <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
+                        <Image
+                          src="/assets/screenshot7.png"
+                          alt="App feature showcase"
+                          fill
+                          priority
+                          className="object-cover object-center scale-[1.03]"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+                      </div>
+                    </PhoneMockup>
+                  </div>
                 </FloatingElement>
               </ParallaxContainer>
             </FadeInSection>
@@ -178,37 +196,31 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="py-24 bg-[#181818] border-t border-[#282828] relative">
-        <div className="absolute inset-0 mesh-grid opacity-10 z-0" />
+      <section className="py-24 bg-[#0f0f13] border-t border-[#282828] relative">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(138,128,249,0.08),transparent)] z-0" />
         
         <FloatingElement 
           className="absolute -top-20 right-10 text-purple-500 opacity-30 hidden md:block"
           yOffset={20}
-          xOffset={10}
-          rotateOffset={10}
           duration={8}
         >
-          <Sparkles className="w-16 h-16" />
+          <Sparkles className="w-16 h-16 animate-pulse-glow" />
         </FloatingElement>
         
         <FloatingElement 
           className="absolute bottom-10 left-10 text-purple-500 opacity-20 hidden md:block"
           yOffset={15}
-          xOffset={15}
-          rotateOffset={-5}
-          duration={7}
+          duration={10}
         >
-          <Sparkles className="w-12 h-12" />
+          <Sparkles className="w-12 h-12 animate-pulse-glow" />
         </FloatingElement>
         
-        <div className="max-w-4xl mx-auto px-4 px-safe text-center">
+        <div className="max-w-4xl mx-auto px-4 px-safe text-center relative z-10">
           <FadeInSection direction="up">
-            <span className="text-sm font-semibold text-[#CFCFCF] mb-2 block">GET STARTED</span>
-            <AnimatedText 
-              text="Ready to Transform Your Language Learning?"
-              className="text-3xl lg:text-4xl font-bold mb-6 leading-[1.3] tracking-normal"
-              delay={0.2}
-            />
+            <span className="text-sm font-semibold text-[#8A80F9] mb-2 block uppercase tracking-wide">GET STARTED</span>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-6 leading-[1.3] tracking-normal neon-text">
+              Ready to Transform Your Language Learning?
+            </h2>
             <FadeInSection delay={0.4}>
               <p className="text-xl mb-12 text-gray-300 leading-relaxed">
                 Join our waitlist for exclusive early access and special perks
@@ -216,24 +228,28 @@ export default function Home() {
             </FadeInSection>
           </FadeInSection>
           
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
-            <GradientInput
-              type="email"
-              placeholder="Enter your email"
-              aria-label="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
-              icon={<Mail size={20} />}
-              containerClassName="w-full"
-            />
+          <form onSubmit={handleSubmit} className="mt-8 flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto">
+            <div className="w-full sm:w-1/2">
+              <GradientInput 
+                type="email"
+                placeholder="Enter your email"
+                name="email"
+                className="w-full"
+                icon={<Mail className="h-5 w-5" />}
+              />
+              <input 
+                type="hidden" 
+                value={email} 
+                onChange={handleEmailChange} 
+              />
+            </div>
             <GradientButton 
               type="submit"
               size="lg" 
-              className="w-full sm:min-w-[200px] h-14 px-10 text-lg font-bold rounded-xl"
+              className="w-full sm:w-1/2 h-14 px-10 text-lg font-bold rounded-xl"
               disabled={isLoading}
             >
-              {isLoading ? 'Joining...' : 'Join the Waitlist'}
+              {isLoading ? 'Joining...' : 'Join Waitlist'}
               {!isLoading && <ChevronRight className="h-5 w-5" />}
             </GradientButton>
           </form>

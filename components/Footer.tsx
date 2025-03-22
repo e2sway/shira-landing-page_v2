@@ -44,10 +44,10 @@ export function Footer() {
               Questions or feedback? Reach out to us at:
             </p>
             <a 
-              href="mailto:ianmcarscadden@gmail.com" 
+              href="mailto:hi@meetshira.com" 
               className="text-purple-400 hover:text-purple-300 transition-colors"
             >
-              ianmcarscadden@gmail.com
+              hi@meetshira.com
             </a>
           </div>
         </div>

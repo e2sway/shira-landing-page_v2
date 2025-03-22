@@ -72,7 +72,7 @@ export default function PrivacyPolicy() {
             
             <h2 className="text-xl font-semibold text-white mt-8 mb-4">Data Retention Policy</h2>
             <p>
-              The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd like them to delete User Provided Data that you have provided via the Application, please contact them at ianmcarscadden@gmail.com and they will respond in a reasonable time.
+              The Service Provider will retain User Provided data for as long as you use the Application and for a reasonable time thereafter. If you'd like them to delete User Provided Data that you have provided via the Application, please contact them at hi@meetshira.com and they will respond in a reasonable time.
             </p>
             
             <h2 className="text-xl font-semibold text-white mt-8 mb-4">Children</h2>
@@ -81,7 +81,7 @@ export default function PrivacyPolicy() {
             </p>
             
             <p>
-              The Application does not address anyone under the age of 13. The Service Provider does not knowingly collect personally identifiable information from children under 13 years of age. In the case the Service Provider discover that a child under 13 has provided personal information, the Service Provider will immediately delete this from their servers. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact the Service Provider (ianmcarscadden@gmail.com) so that they will be able to take the necessary actions.
+              The Application does not address anyone under the age of 13. The Service Provider does not knowingly collect personally identifiable information from children under 13 years of age. In the case the Service Provider discover that a child under 13 has provided personal information, the Service Provider will immediately delete this from their servers. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact the Service Provider (hi@meetshira.com) so that they will be able to take the necessary actions.
             </p>
             
             <h2 className="text-xl font-semibold text-white mt-8 mb-4">Security</h2>
@@ -105,7 +105,7 @@ export default function PrivacyPolicy() {
             
             <h2 className="text-xl font-semibold text-white mt-8 mb-4">Contact Us</h2>
             <p>
-              If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at ianmcarscadden@gmail.com.
+              If you have any questions regarding privacy while using the Application, or have questions about the practices, please contact the Service Provider via email at hi@meetshira.com.
             </p>
           </div>
         </div>

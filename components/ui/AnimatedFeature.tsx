@@ -22,83 +22,99 @@ export function AnimatedFeature({
 }: AnimatedFeatureProps) {
   return (
     <motion.div
-      className={cn(
-        "flex flex-col items-start gap-4 p-6 rounded-xl glass-effect border border-white/10 hover:border-purple-500/30 transition-all",
-        "relative overflow-hidden",
-        className
-      )}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{
-        duration: 0.5,
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ 
+        duration: 0.5, 
         delay,
-        ease: [0.22, 1, 0.36, 1],
+        ease: "easeOut" 
       }}
       whileHover={{ 
         y: -5,
-        boxShadow: "0 10px 30px -10px rgba(138, 128, 249, 0.2)"
+        transition: { duration: 0.2 }
       }}
+      className="glass-card p-6 relative overflow-hidden group"
     >
-      {/* Shimmer effect on hover */}
-      <motion.div 
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full"
-        initial={{ x: "-100%" }}
-        whileHover={{ x: "200%" }}
-        transition={{ duration: 1.5 }}
-      />
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#8A80F9]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
-      <motion.div
-        className={cn(
-          "flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-br from-purple-600/20 to-purple-800/20 text-[#8A80F9]",
-          "relative overflow-hidden",
-          iconClassName
-        )}
-        initial={{ scale: 0.8, rotate: -5 }}
-        whileInView={{ scale: 1, rotate: 0 }}
-        whileHover={{ 
-          scale: 1.1, 
-          rotate: 5,
-          background: "linear-gradient(to bottom right, rgba(138, 128, 249, 0.3), rgba(90, 81, 225, 0.3))",
-          color: "#8A80F9"
-        }}
-        transition={{
-          duration: 0.3,
-          delay: delay + 0.1,
+      {/* Shimmer effect overlay */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 animate-shimmer transition-opacity duration-300" />
+      
+      {/* Border gradient */}
+      <div className="absolute inset-0 rounded-xl neon-border opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      
+      {/* Icon with glow effect */}
+      <motion.div 
+        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#8A80F9]/10 text-[#8A80F9] mb-4 relative"
+        whileHover={{
+          scale: 1.1,
+          transition: { duration: 0.2 }
         }}
       >
-        {/* Glow effect */}
-        <motion.div 
-          className="absolute inset-0 opacity-0 rounded-lg"
-          whileHover={{ opacity: 0.5 }}
-          style={{
-            background: "radial-gradient(circle at center, rgba(138, 128, 249, 0.8) 0%, transparent 70%)",
-            filter: "blur(5px)"
-          }}
-        />
+        {/* Icon glow */}
+        <div className="absolute inset-0 rounded-full animate-pulse-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         
-        {icon}
+        {/* Rotating gradient border */}
+        <div className="absolute inset-[-1px] rounded-full overflow-hidden">
+          <div 
+            className="absolute inset-0 bg-gradient-to-r from-[#8A80F9] via-[#5A51E1] to-[#8A80F9] opacity-30 group-hover:opacity-70 transition-opacity duration-500 animate-gradient-shift"
+            style={{ backgroundSize: '200% 200%' }}
+          />
+        </div>
+        
+        <motion.div
+          animate={{
+            scale: [1, 1.05, 1],
+            rotate: [0, 2, 0, -2, 0],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="relative z-10"
+        >
+          {icon}
+        </motion.div>
       </motion.div>
       
-      <div>
-        <motion.h3
-          className="text-lg font-semibold mb-1 text-white"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: delay + 0.2, duration: 0.3 }}
+      {/* Text content */}
+      <div className="space-y-2">
+        <motion.h3 
+          className="text-lg font-semibold text-white"
+          initial={{ opacity: 0.9 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
         >
-          {title}
+          <span className="relative group-hover:neon-text transition-all duration-300">
+            {title}
+            <motion.span 
+              className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#8A80F9] group-hover:w-full transition-all duration-500"
+              initial={{ width: 0 }}
+              whileInView={{ width: "100%" }}
+              transition={{ delay: delay + 0.5, duration: 0.5 }}
+            />
+          </span>
         </motion.h3>
         
-        <motion.p
-          className="text-gray-400 text-sm"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ delay: delay + 0.3, duration: 0.3 }}
-        >
+        <p className="text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
           {description}
-        </motion.p>
+        </p>
       </div>
+      
+      {/* Hover indicator */}
+      <motion.div 
+        className="absolute bottom-0 right-0 w-16 h-16 pointer-events-none"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <svg viewBox="0 0 100 100" className="w-full h-full text-[#8A80F9]/20">
+          <path d="M0,0 L100,100 L100,0 L0,0" fill="currentColor" />
+        </svg>
+      </motion.div>
     </motion.div>
   )
 } 

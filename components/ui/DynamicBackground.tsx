@@ -12,6 +12,8 @@ interface DynamicBackgroundProps {
   secondaryColor?: string
   accentColor?: string
   gridSize?: number
+  enableMeteors?: boolean
+  enableOrbs?: boolean
 }
 
 export function DynamicBackground({
@@ -23,6 +25,8 @@ export function DynamicBackground({
   secondaryColor = '#5A51E1',
   accentColor = '#9F97FF',
   gridSize = 30,
+  enableMeteors = true,
+  enableOrbs = true,
 }: DynamicBackgroundProps) {
   const [isClient, setIsClient] = useState(false)
   const [particles, setParticles] = useState<Array<{
@@ -33,6 +37,15 @@ export function DynamicBackground({
     speed: number
     opacity: number
     color: string
+  }>>([])
+  
+  const [meteors, setMeteors] = useState<Array<{
+    id: number
+    x: number
+    y: number
+    size: number
+    duration: number
+    delay: number
   }>>([])
   
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -55,6 +68,20 @@ export function DynamicBackground({
       }))
       
       setParticles(newParticles)
+    }
+    
+    if (enableMeteors) {
+      // Generate random meteors
+      const newMeteors = Array.from({ length: 10 }).map((_, i) => ({
+        id: i,
+        x: Math.random() * 100 + 50,
+        y: Math.random() * -50,
+        size: Math.random() * 2 + 1,
+        duration: Math.random() * 3 + 2,
+        delay: Math.random() * 15
+      }))
+      
+      setMeteors(newMeteors)
     }
     
     // Setup canvas for mesh gradient if enabled
@@ -81,6 +108,8 @@ export function DynamicBackground({
         { x: 0, y: canvas.height, vx: 0.5, vy: -0.5 },
         { x: canvas.width, y: canvas.height, vx: -0.5, vy: -0.5 },
         { x: canvas.width / 2, y: canvas.height / 2, vx: 0.7, vy: 0.3 },
+        { x: canvas.width / 3, y: canvas.height / 3, vx: -0.3, vy: 0.6 },
+        { x: canvas.width * 2/3, y: canvas.height * 2/3, vx: 0.4, vy: -0.5 },
       ]
       
       // Animation function
@@ -107,8 +136,8 @@ export function DynamicBackground({
           canvas.width / 2, canvas.height / 2, canvas.width * 0.8
         )
         
-        gradient.addColorStop(0, 'rgba(138, 128, 249, 0.05)')
-        gradient.addColorStop(0.5, 'rgba(90, 81, 225, 0.03)')
+        gradient.addColorStop(0, 'rgba(138, 128, 249, 0.08)')
+        gradient.addColorStop(0.5, 'rgba(90, 81, 225, 0.05)')
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
         
         ctx.fillStyle = gradient
@@ -133,8 +162,25 @@ export function DynamicBackground({
             ctx.moveTo(p1.x, p1.y)
             ctx.lineTo(p2.x, p2.y)
             ctx.strokeStyle = `rgba(138, 128, 249, ${opacity})`
-            ctx.lineWidth = 1
+            ctx.lineWidth = 1.5
             ctx.stroke()
+            
+            // Draw glow effect around intersection points
+            const midX = (p1.x + p2.x) / 2
+            const midY = (p1.y + p2.y) / 2
+            
+            const glowGradient = ctx.createRadialGradient(
+              midX, midY, 0,
+              midX, midY, 20
+            )
+            
+            glowGradient.addColorStop(0, `rgba(138, 128, 249, ${opacity * 2})`)
+            glowGradient.addColorStop(1, 'rgba(138, 128, 249, 0)')
+            
+            ctx.beginPath()
+            ctx.fillStyle = glowGradient
+            ctx.arc(midX, midY, 20, 0, Math.PI * 2)
+            ctx.fill()
           }
         }
         
@@ -153,7 +199,7 @@ export function DynamicBackground({
         }
       }
     }
-  }, [enableMesh, enableParticles, particleCount, primaryColor, secondaryColor, accentColor])
+  }, [enableMesh, enableParticles, particleCount, primaryColor, secondaryColor, accentColor, enableMeteors])
   
   return (
     <div className={cn("fixed inset-0 overflow-hidden -z-10", className)}>
@@ -164,9 +210,6 @@ export function DynamicBackground({
           className="absolute inset-0 w-full h-full"
         />
       )}
-      
-      {/* Enhanced grid background */}
-      <div className="absolute inset-0 mesh-grid opacity-40" style={{ backgroundSize: `${gridSize}px ${gridSize}px` }} />
       
       {/* Particles */}
       {isClient && enableParticles && particles.map(particle => (
@@ -196,23 +239,71 @@ export function DynamicBackground({
         />
       ))}
       
-      {/* Glow effects */}
-      <div className="absolute top-1/4 left-1/4 w-1/2 h-1/2 rounded-full opacity-10 animate-pulse-slow" 
-        style={{ 
-          background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)`,
-          filter: 'blur(60px)',
-        }} 
-      />
+      {/* Meteors */}
+      {isClient && enableMeteors && meteors.map(meteor => (
+        <motion.div
+          key={`meteor-${meteor.id}`}
+          className="absolute"
+          initial={{ 
+            x: `${meteor.x}%`, 
+            y: `${meteor.y}%`,
+            rotate: -15,
+            opacity: 0
+          }}
+          animate={{ 
+            x: `${meteor.x - 100}%`, 
+            y: `${meteor.y + 100}%`,
+            rotate: 25,
+            opacity: [0, 1, 0] 
+          }}
+          transition={{
+            duration: meteor.duration,
+            ease: "easeIn",
+            delay: meteor.delay,
+            repeat: Infinity,
+            repeatDelay: Math.random() * 10 + 10
+          }}
+        >
+          <div 
+            className="h-[50px] w-[1px] bg-gradient-to-b from-transparent via-white to-[#8A80F9]"
+            style={{ 
+              boxShadow: '0 0 20px rgba(138, 128, 249, 0.7)',
+              transform: 'rotate(15deg)'
+            }}
+          />
+        </motion.div>
+      ))}
       
-      <div className="absolute bottom-1/4 right-1/4 w-1/3 h-1/3 rounded-full opacity-5 animate-float-slow" 
-        style={{ 
-          background: `radial-gradient(circle, ${secondaryColor} 0%, transparent 70%)`,
-          filter: 'blur(40px)',
-        }} 
-      />
+      {/* Glow orbs */}
+      {isClient && enableOrbs && (
+        <>
+          <div className="absolute top-1/4 left-1/4 w-[40vw] h-[40vw] rounded-full opacity-10 animate-orb-glow" 
+            style={{ 
+              background: `radial-gradient(circle, ${primaryColor} 0%, transparent 70%)`,
+              filter: 'blur(60px)',
+            }} 
+          />
+          
+          <div className="absolute bottom-1/4 right-1/4 w-[25vw] h-[25vw] rounded-full opacity-5 animate-orb-glow" 
+            style={{ 
+              background: `radial-gradient(circle, ${secondaryColor} 0%, transparent 70%)`,
+              filter: 'blur(40px)',
+              animationDelay: '1s'
+            }} 
+          />
+          
+          <div className="absolute top-3/4 left-2/3 w-[30vw] h-[30vw] rounded-full opacity-8 animate-orb-glow" 
+            style={{ 
+              background: `radial-gradient(circle, ${accentColor} 0%, transparent 70%)`,
+              filter: 'blur(80px)',
+              animationDelay: '2s'
+            }} 
+          />
+        </>
+      )}
       
-      {/* Overlay to ensure content readability */}
-      <div className="absolute inset-0 bg-black/50" />
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f13] via-transparent to-[#0f0f13] opacity-80" />
     </div>
   )
 } 
