@@ -39,19 +39,39 @@ export default function Home() {
         
         <div className="relative z-10 max-w-[95vw] mx-auto">
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <FadeInSection direction="up" className="space-y-6 pt-6 md:pt-0">
+            
+            {/* Phone mockup - now first */}
+            <FadeInSection direction="right" delay={0.4}>
+              <ParallaxContainer speed={0.2} className="relative max-w-[90vw] mx-auto lg:mx-0">
+                <FloatingElement 
+                  yOffset={10} 
+                  duration={6} 
+                  className="group transition-transform duration-300 hover:scale-[1.02]"
+                >
+                  <PhoneMockup color="purple">
+                    <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
+                      <ImageCarousel 
+                        transitionType="zoom"
+                        interval={5000}
+                      />
+                    </div>
+                  </PhoneMockup>
+                </FloatingElement>
+              </ParallaxContainer>
+            </FadeInSection>
+
+            {/* Text and email - now second */}
+            <FadeInSection direction="left" className="space-y-6 pt-6 md:pt-0">
               <AnimatedText 
                 text="Say Hi To Shira- Turn Endless Scrolling Into Language Learning"
-                className="text-3xl md:text-[48px] font-bold leading-[1.2]"
+                className="text-3xl md:text-[48px] font-bold leading-[1.3] tracking-normal"
                 highlightWords={["Shira-", "Language", "Learning"]}
                 delay={0.2}
               />
               
-              <FadeInSection delay={0.4}>
-                <h2 className="text-lg text-[#CFCFCF] mb-6">
-                  Learn real-life conversations through bite-sizes videos, interactive exercises, and conversations with AI
-                </h2>
-              </FadeInSection>
+              <p className="text-gray-300 text-lg leading-relaxed">
+                Our AI-powered app transforms your daily social media habits into language learning opportunities. Experience immersive learning that adapts to your interests and skill level.
+              </p>
               
               {/* Email signup form */}
               <FadeInSection delay={0.6}>
@@ -79,24 +99,6 @@ export default function Home() {
               </FadeInSection>
             </FadeInSection>
 
-            <FadeInSection direction="left" delay={0.4}>
-              <ParallaxContainer speed={0.2} className="relative max-w-[90vw] mx-auto lg:mx-0">
-                <FloatingElement 
-                  yOffset={10} 
-                  duration={6} 
-                  className="group transition-transform duration-300 hover:scale-[1.02]"
-                >
-                  <PhoneMockup color="purple">
-                    <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
-                      <ImageCarousel 
-                        transitionType="zoom"
-                        interval={5000}
-                      />
-                    </div>
-                  </PhoneMockup>
-                </FloatingElement>
-              </ParallaxContainer>
-            </FadeInSection>
           </div>
         </div>
       </section>
@@ -113,12 +115,12 @@ export default function Home() {
                 <span className="text-sm font-semibold text-[#CFCFCF] mb-2 block">FEATURES & BENEFITS</span>
                 <AnimatedText 
                   text="Key Benefits"
-                  className="text-3xl font-bold mb-12 text-white"
+                  className="text-3xl font-bold mb-12 text-white leading-relaxed tracking-wide"
                   delay={0.2}
                 />
               </FadeInSection>
               
-              <div className="space-y-4">
+              <div className="space-y-6">
                 <AnimatedFeature
                   icon={<MessageCircle className="w-6 h-6" />}
                   title="Learn through real-life conversations"
@@ -204,11 +206,11 @@ export default function Home() {
             <span className="text-sm font-semibold text-[#CFCFCF] mb-2 block">GET STARTED</span>
             <AnimatedText 
               text="Ready to Transform Your Language Learning?"
-              className="text-3xl lg:text-4xl font-bold mb-6"
+              className="text-3xl lg:text-4xl font-bold mb-6 leading-[1.3] tracking-normal"
               delay={0.2}
             />
             <FadeInSection delay={0.4}>
-              <p className="text-xl mb-12 text-[#CFCFCF]">
+              <p className="text-xl mb-12 text-gray-300 leading-relaxed">
                 Join our waitlist for exclusive early access and special perks
               </p>
             </FadeInSection>
