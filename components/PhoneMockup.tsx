@@ -6,12 +6,14 @@ interface PhoneMockupProps {
   children: React.ReactNode
   slideFrom?: 'left' | 'right'
   color?: 'black' | 'white' | 'purple'
+  performanceMode?: boolean
 }
 
 export function PhoneMockup({ 
   children, 
   slideFrom = 'right',
-  color = 'black'
+  color = 'black',
+  performanceMode = true
 }: PhoneMockupProps) {
   // Define color schemes
   const colorSchemes = {
@@ -29,128 +31,124 @@ export function PhoneMockup({
     },
     purple: {
       frame: 'bg-[#1a1825]',
-      shadow: 'shadow-[0_0_40px_rgba(138,128,249,0.25)]',
-      buttons: 'bg-[#2a2839]',
+      shadow: 'shadow-[0_0_30px_rgba(138,128,249,0.3)]',
+      buttons: 'bg-[#282838]',
       accent: 'bg-[#8A80F9]'
     }
   }
+  
+  // Animation variants with performance optimizations
+  const phoneVariants = {
+    hidden: {
+      x: slideFrom === 'left' ? -100 : 100,
+      opacity: 0,
+      rotateY: slideFrom === 'left' ? -15 : 15
+    },
+    visible: {
+      x: 0,
+      opacity: 1,
+      rotateY: 0,
+      transition: {
+        type: 'spring',
+        damping: 20, // Increased damping for performance
+        stiffness: 90, // Reduced stiffness
+        duration: 0.7 // Fixed duration
+      }
+    }
+  }
 
-  const scheme = colorSchemes[color]
+  // Simpler hover animations for performance mode
+  const hoverAnimation = performanceMode ? {
+    scale: 1.01,
+    y: -5,
+    transition: { duration: 0.3 }
+  } : {
+    scale: 1.03,
+    y: -10,
+    rotateY: slideFrom === 'left' ? -2 : 2,
+    transition: { 
+      duration: 0.5, 
+      ease: [0.33, 1, 0.68, 1] 
+    }
+  }
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: slideFrom === 'left' ? -100 : 100, rotateY: slideFrom === 'left' ? 10 : -10 }}
-      whileInView={{ opacity: 1, x: 0, rotateY: 0 }}
-      viewport={{ once: true }}
-      transition={{ 
-        duration: 0.8, 
-        delay: 0.2,
-        type: "spring",
-        damping: 20,
-        stiffness: 100
-      }}
-      whileHover={{ 
-        scale: 1.02,
-        rotateY: slideFrom === 'left' ? -5 : 5,
-        transition: { duration: 0.3 }
-      }}
-      className="relative mx-auto perspective-1000"
+      className="w-full max-w-[300px] perspective-1500"
+      style={{ willChange: 'transform' }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      variants={phoneVariants}
+      whileHover={hoverAnimation}
     >
-      {/* Hovering shadow effect */}
-      <motion.div 
-        className={`absolute -inset-8 bg-gradient-to-r from-[#8A80F9]/0 via-[#8A80F9]/5 to-[#8A80F9]/0 rounded-[3rem] opacity-0 blur-xl`}
-        animate={{
-          opacity: [0, 0.7, 0],
-          rotate: [0, 5, 0, -5, 0],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
+      {/* Hovering shadow effect - simplified in performance mode */}
+      {!performanceMode && (
+        <motion.div 
+          className="absolute -inset-10 opacity-30 z-[-1]"
+          style={{ 
+            background: `radial-gradient(50% 50% at 50% 50%, ${color === 'purple' ? 'rgba(138, 128, 249, 0.25)' : 'rgba(30, 30, 30, 0.25)'} 0%, transparent 100%)`,
+            willChange: 'opacity, transform'
+          }}
+          animate={{
+            opacity: [0.2, 0.3, 0.2],
+            scale: [0.95, 1.05, 0.95]
+          }}
+          transition={{
+            duration: 5,
+            repeat: Infinity,
+            ease: 'easeInOut'
+          }}
+        />
+      )}
       
-      {/* Phone dimensions based on iPhone aspect ratio */}
-      <div className="relative w-[300px] h-[650px] mx-auto">
-        {/* Phone frame with enhanced reflection */}
-        <div className={`absolute inset-0 ${scheme.frame} rounded-[2.5rem] ${scheme.shadow} backdrop-blur-xl overflow-hidden transition-all duration-300 group-hover:shadow-[0_0_50px_rgba(138,128,249,0.4)]`}>
-          {/* Subtle reflection overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none" />
-          
-          {/* Enhanced side reflection */}
-          <div className="absolute top-0 bottom-0 right-0 w-[1px] bg-gradient-to-b from-white/40 via-white/10 to-white/40" />
-          <div className="absolute top-0 left-10 right-10 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-          
-          {/* Subtle frame texture */}
-          <div className="absolute inset-0 opacity-10" style={{ 
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 5v1H0V0h5z'/%3E%3C/g%3E%3C/svg%3E")` 
-          }} />
-        </div>
+      {/* Phone frame */}
+      <div 
+        className={`relative rounded-[40px] ${colorSchemes[color].frame} ${colorSchemes[color].shadow} overflow-hidden aspect-[9/19] p-[4%]`}
+        style={{ 
+          willChange: 'transform',
+          backgroundImage: !performanceMode && color === 'purple' ? 
+            'linear-gradient(135deg, rgba(138, 128, 249, 0.1) 0%, rgba(20, 20, 30, 0) 80%)' : 
+            'none'
+        }}
+      >
+        {/* Frame reflection - omitted in performance mode */}
+        {!performanceMode && (
+          <div className="absolute inset-0 overflow-hidden rounded-[40px] pointer-events-none">
+            <div className="absolute top-0 left-0 right-0 h-[35%] bg-gradient-to-b from-white/10 to-transparent opacity-30" />
+          </div>
+        )}
         
-        {/* Screen bezel with enhanced reflection */}
-        <div className="absolute inset-[3px] bg-black rounded-[2.25rem] overflow-hidden">
-          {/* Screen reflection */}
-          <motion.div 
-            className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent pointer-events-none z-20"
-            animate={{
-              opacity: [0.05, 0.1, 0.05],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-        </div>
-        
-        {/* Screen content */}
-        <div className="absolute inset-[3px] rounded-[2.25rem] overflow-hidden">
+        {/* Phone screen */}
+        <div className="rounded-[35px] overflow-hidden w-full h-full bg-black">
+          {/* Content container */}
           <div className="w-full h-full relative">
             {children}
           </div>
         </div>
-
-        {/* Volume buttons with animation */}
-        <motion.div 
-          className={`absolute left-[-2px] top-[100px] w-[4px] h-[30px] ${scheme.buttons} rounded-l-sm overflow-hidden`}
-          whileHover={{ x: -2, backgroundColor: "#8A80F9" }}
-        >
-          <div className="absolute inset-0 opacity-20 bg-gradient-to-b from-white/30 via-transparent to-white/10" />
-        </motion.div>
-        <motion.div 
-          className={`absolute left-[-2px] top-[140px] w-[4px] h-[30px] ${scheme.buttons} rounded-l-sm overflow-hidden`}
-          whileHover={{ x: -2, backgroundColor: "#8A80F9" }}
-        >
-          <div className="absolute inset-0 opacity-20 bg-gradient-to-b from-white/30 via-transparent to-white/10" />
-        </motion.div>
         
-        {/* Power button with animation */}
-        <motion.div 
-          className={`absolute right-[-2px] top-[120px] w-[4px] h-[45px] ${scheme.buttons} rounded-r-sm overflow-hidden`}
-          whileHover={{ x: 2, backgroundColor: "#8A80F9" }}
-        >
-          <div className="absolute inset-0 opacity-20 bg-gradient-to-b from-white/30 via-transparent to-white/10" />
-        </motion.div>
-        
-        {/* Bottom speaker and port */}
-        <div className="absolute bottom-[14px] left-1/2 -translate-x-1/2 w-[140px] h-[5px] bg-[#282828] rounded-full flex items-center justify-center overflow-hidden">
-          <div className="w-[50px] h-[2px] bg-[#333] rounded-full" />
-          <div className="absolute inset-0 opacity-20 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+        {/* Volume buttons */}
+        <div className="absolute top-[15%] left-[-2px] h-16 flex flex-col gap-2">
+          <div className={`h-8 w-[3px] rounded-r-md ${colorSchemes[color].buttons}`} />
+          <div className={`h-8 w-[3px] rounded-r-md ${colorSchemes[color].buttons}`} />
         </div>
         
-        {/* Subtle phone shimmer effect */}
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-0 rounded-[2.5rem]"
-          animate={{ 
-            opacity: [0, 0.5, 0],
-            left: ['-100%', '100%']
-          }}
-          transition={{ 
-            duration: 3,
-            repeat: Infinity, 
-            repeatDelay: 5
-          }}
-        />
+        {/* Power button */}
+        <div className="absolute top-[20%] right-[-2px] h-10">
+          <div className={`h-10 w-[3px] rounded-l-md ${colorSchemes[color].buttons}`} />
+        </div>
+        
+        {/* Bottom details - simplified in performance mode */}
+        <div className="absolute bottom-[2%] left-0 right-0 flex justify-center">
+          {performanceMode ? (
+            <div className={`h-1 w-1/3 rounded-full ${colorSchemes[color].accent} opacity-80`} />
+          ) : (
+            <div className="flex items-center gap-2">
+              <div className={`h-[3px] w-[30%] rounded-full ${colorSchemes[color].accent} opacity-80`} />
+              <div className={`h-1 w-1 rounded-full ${colorSchemes[color].accent} opacity-50`} />
+            </div>
+          )}
+        </div>
       </div>
     </motion.div>
   )

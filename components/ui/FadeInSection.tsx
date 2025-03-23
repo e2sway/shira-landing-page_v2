@@ -12,6 +12,7 @@ interface FadeInSectionProps {
   distance?: number
   once?: boolean
   threshold?: number
+  performanceMode?: boolean
 }
 
 export function FadeInSection({
@@ -23,22 +24,38 @@ export function FadeInSection({
   distance = 30,
   once = true,
   threshold = 0.1,
+  performanceMode = true,
 }: FadeInSectionProps) {
+  // Adjust animation parameters for performance mode
+  const actualDistance = performanceMode ? Math.floor(distance * 0.6) : distance
+  const actualDuration = performanceMode ? Math.min(duration, 0.4) : duration
+  
   // Set initial animation values based on direction
   const getInitialPosition = () => {
+    // Simplified for performance mode
+    if (performanceMode && direction !== 'none') {
+      return { 
+        opacity: 0,
+        [direction === 'up' || direction === 'down' ? 'y' : 'x']: 
+          direction === 'up' || direction === 'left' 
+            ? actualDistance 
+            : -actualDistance
+      }
+    }
+    
     switch (direction) {
       case 'up':
-        return { opacity: 0, y: distance }
+        return { opacity: 0, y: actualDistance }
       case 'down':
-        return { opacity: 0, y: -distance }
+        return { opacity: 0, y: -actualDistance }
       case 'left':
-        return { opacity: 0, x: distance }
+        return { opacity: 0, x: actualDistance }
       case 'right':
-        return { opacity: 0, x: -distance }
+        return { opacity: 0, x: -actualDistance }
       case 'none':
         return { opacity: 0 }
       default:
-        return { opacity: 0, y: distance }
+        return { opacity: 0, y: actualDistance }
     }
   }
 
@@ -64,10 +81,11 @@ export function FadeInSection({
       initial={getInitialPosition()}
       whileInView={getAnimatePosition()}
       viewport={{ once, amount: threshold }}
+      style={{ willChange: 'transform, opacity' }}
       transition={{
-        duration,
+        duration: actualDuration,
         delay,
-        ease: [0.22, 1, 0.36, 1], // Custom ease curve for smooth animation
+        ease: performanceMode ? "easeOut" : [0.22, 1, 0.36, 1], // Simpler easing in performance mode
       }}
     >
       {children}

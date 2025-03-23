@@ -35,12 +35,13 @@ export default function Home() {
     <main className="min-h-screen bg-[#0f0f13] overflow-x-hidden">
       <Toaster position="top-center" />
       <DynamicBackground 
-        particleCount={80}
-        enableMeteors={true}
+        particleCount={40}
+        enableMeteors={false}
         enableOrbs={true}
         primaryColor="#8A80F9"
         secondaryColor="#5A51E1"
         accentColor="#9F97FF"
+        performanceMode={true}
       />
       
       {/* Hero Section */}
@@ -51,20 +52,22 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             
             {/* Phone mockup - now first */}
-            <FadeInSection direction="right" delay={0.4}>
+            <FadeInSection direction="right" delay={0.4} performanceMode={true}>
               <ParallaxContainer speed={0.2} className="relative max-w-[90vw] mx-auto lg:mx-0">
                 <FloatingElement 
                   yOffset={10} 
                   duration={6} 
                   className="group transition-transform duration-300 hover:scale-[1.02]"
+                  performanceMode={true}
                 >
                   <div className="perspective-1500 relative">
                     <div className="absolute -inset-4 bg-gradient-to-r from-[#8A80F9]/20 to-[#5A51E1]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-                    <PhoneMockup color="purple">
+                    <PhoneMockup color="purple" performanceMode={true}>
                       <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
                         <ImageCarousel 
-                          transitionType="zoom"
+                          transitionType="fade"
                           interval={5000}
+                          performanceMode={true}
                         />
                       </div>
                     </PhoneMockup>
@@ -74,7 +77,7 @@ export default function Home() {
             </FadeInSection>
 
             {/* Text and email - now second */}
-            <FadeInSection direction="left" className="space-y-6 pt-6 md:pt-0">
+            <FadeInSection direction="left" className="space-y-6 pt-6 md:pt-0" performanceMode={true}>
               <AnimatedText 
                 text="Say Hi To Shira- Turn Endless Scrolling Into Language Learning"
                 className="text-3xl md:text-[48px] font-bold leading-[1.3] tracking-normal"
@@ -164,17 +167,18 @@ export default function Home() {
               </div>
             </div>
 
-            <FadeInSection direction="right" delay={0.4}>
+            <FadeInSection direction="right" delay={0.4} performanceMode={true}>
               <ParallaxContainer speed={0.3} reverse className="relative">
                 <FloatingElement 
                   yOffset={15} 
                   duration={7}
                   rotateOffset={2}
                   className="group transition-all duration-300"
+                  performanceMode={true}
                 >
                   <div className="perspective-1500 relative">
                     <div className="absolute -inset-4 bg-gradient-to-r from-[#5A51E1]/20 to-[#8A80F9]/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-500" />
-                    <PhoneMockup slideFrom="left" color="purple">
+                    <PhoneMockup slideFrom="left" color="purple" performanceMode={true}>
                       <div className="relative w-full h-full bg-black rounded-[2.5rem] overflow-hidden">
                         <Image
                           src="/assets/screenshot7.png"
