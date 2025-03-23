@@ -13,6 +13,10 @@ const nextConfig = {
     optimizeCss: true,
     optimizePackageImports: ['framer-motion'],
   },
+  // Ensure proper Vercel deployment
+  output: 'standalone',
+  // Disable source maps in production for better performance
+  productionBrowserSourceMaps: false,
 }
 
 module.exports = nextConfig 
