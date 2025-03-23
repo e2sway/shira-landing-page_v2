@@ -8,11 +8,6 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     formats: ['image/webp'],
   },
-  // Improve optimization for static assets
-  experimental: {
-    optimizeCss: true,
-    optimizePackageImports: ['framer-motion'],
-  },
   // Ensure proper Vercel deployment
   output: 'standalone',
   // Disable source maps in production for better performance

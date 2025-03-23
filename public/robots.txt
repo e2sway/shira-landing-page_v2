@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://shira-app.com
+
+# Sitemaps
+Sitemap: https://shira-app.com/sitemap.xml
