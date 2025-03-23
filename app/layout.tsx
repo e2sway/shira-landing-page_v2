@@ -26,7 +26,7 @@ export default function RootLayout({
         {/* Enable safe area support for mobile devices */}
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
-      <body className={`${inter.className} bg-[#181818] text-white antialiased`}>
+      <body className={`${inter.className} bg-[#181818] text-white antialiased overflow-x-hidden min-h-screen relative`}>
         {children}
         <Analytics />
         <Footer />

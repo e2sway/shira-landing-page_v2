@@ -10,6 +10,8 @@ interface GradientInputProps {
   buttonText?: string
   onButtonClick?: () => void
   className?: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export function GradientInput({
@@ -20,6 +22,8 @@ export function GradientInput({
   buttonText,
   onButtonClick,
   className,
+  value,
+  onChange,
 }: GradientInputProps) {
   const [isFocused, setIsFocused] = useState(false)
 
@@ -83,6 +87,8 @@ export function GradientInput({
             className="w-full bg-transparent outline-none border-none text-inherit placeholder:text-gray-400"
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
+            value={value}
+            onChange={onChange}
           />
           
           {/* Button */}

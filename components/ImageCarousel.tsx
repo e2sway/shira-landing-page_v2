@@ -28,17 +28,55 @@ export function ImageCarousel({
 }: ImageCarouselProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+  const [isImagesLoaded, setIsImagesLoaded] = useState(false)
+
+  // Use useEffect to set isMounted to true after component mounts with a slight delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsMounted(true)
+    }, 150);
+    
+    return () => clearTimeout(timer);
+  }, [])
+
+  // Preload images
+  useEffect(() => {
+    if (!isMounted) return;
+    
+    const preloadImages = async () => {
+      try {
+        const imagePromises = images.map(src => {
+          return new Promise((resolve, reject) => {
+            const img = new globalThis.Image();
+            img.src = src;
+            img.onload = resolve;
+            img.onerror = reject;
+          });
+        });
+        
+        await Promise.all(imagePromises);
+        setIsImagesLoaded(true);
+      } catch (error) {
+        console.error('Failed to preload images:', error);
+        // Still set images as loaded to ensure UI renders even if some images fail
+        setIsImagesLoaded(true);
+      }
+    };
+    
+    preloadImages();
+  }, [images, isMounted]);
 
   // Handle automatic transitions
   useEffect(() => {
-    if (!autoPlay || isPaused) return
+    if (!autoPlay || isPaused || !isMounted || !isImagesLoaded) return;
     
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length)
-    }, performanceMode ? interval * 1.5 : interval)
+      setCurrentIndex((prev) => (prev + 1) % images.length);
+    }, performanceMode ? interval * 1.5 : interval);
     
-    return () => clearInterval(timer)
-  }, [images.length, interval, autoPlay, isPaused, performanceMode])
+    return () => clearInterval(timer);
+  }, [images.length, interval, autoPlay, isPaused, performanceMode, isMounted, isImagesLoaded]);
 
   // Define animation variants based on transition type
   const getVariants = () => {
@@ -59,21 +97,21 @@ export function ImageCarousel({
         }
       case 'zoom':
         return {
-          enter: { opacity: 0, scale: 0.8 },
+          enter: { opacity: 0, scale: 0.9 },
           center: { opacity: 1, scale: 1 },
-          exit: { opacity: 0, scale: 1.2 }
+          exit: { opacity: 0, scale: 1.1 }
         }
       case 'flip':
         return {
-          enter: { opacity: 0, rotateY: 90 },
+          enter: { opacity: 0, rotateY: 45 },
           center: { opacity: 1, rotateY: 0 },
-          exit: { opacity: 0, rotateY: -90 }
+          exit: { opacity: 0, rotateY: -45 }
         }
       case 'slide':
       default:
         return {
           enter: (direction: number) => ({ 
-            x: direction > 0 ? 300 : -300,
+            x: direction > 0 ? 150 : -150,
             opacity: 0
           }),
           center: { 
@@ -81,7 +119,7 @@ export function ImageCarousel({
             opacity: 1
           },
           exit: (direction: number) => ({ 
-            x: direction < 0 ? 300 : -300,
+            x: direction < 0 ? 150 : -150,
             opacity: 0
           })
         }
@@ -100,11 +138,20 @@ export function ImageCarousel({
     }
     
     return {
-      x: { type: "spring", stiffness: 300, damping: 30 },
+      x: { type: "spring", stiffness: 200, damping: 25 },
       opacity: { duration: 0.4 },
-      rotateY: { duration: 0.6 },
-      scale: { duration: 0.5 }
+      rotateY: { duration: 0.5 },
+      scale: { duration: 0.4 }
     }
+  }
+
+  // If not mounted yet or images aren't loaded, render a placeholder
+  if (!isMounted || !isImagesLoaded) {
+    return (
+      <div className="w-full h-full bg-black flex items-center justify-center">
+        <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   return (

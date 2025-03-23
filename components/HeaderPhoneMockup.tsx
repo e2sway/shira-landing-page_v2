@@ -2,19 +2,19 @@
 import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 
-interface PhoneMockupProps {
+interface HeaderPhoneMockupProps {
   children: React.ReactNode
   slideFrom?: 'left' | 'right'
   color?: 'black' | 'white' | 'purple'
   performanceMode?: boolean
 }
 
-export function PhoneMockup({ 
+export function HeaderPhoneMockup({ 
   children, 
   slideFrom = 'right',
   color = 'black',
   performanceMode = true
-}: PhoneMockupProps) {
+}: HeaderPhoneMockupProps) {
   // Add useState to track whether component is mounted
   const [isMounted, setIsMounted] = useState(false)
   

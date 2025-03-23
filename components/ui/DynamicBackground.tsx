@@ -14,6 +14,7 @@ interface DynamicBackgroundProps {
   enableMeteors?: boolean
   enableOrbs?: boolean
   performanceMode?: boolean
+  gridSize?: number
 }
 
 export function DynamicBackground({
@@ -27,6 +28,7 @@ export function DynamicBackground({
   enableMeteors = false,
   enableOrbs = true,
   performanceMode = true,
+  gridSize = 30,
 }: DynamicBackgroundProps) {
   const [isClient, setIsClient] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -190,11 +192,20 @@ export function DynamicBackground({
   return (
     <div className={cn("fixed inset-0 overflow-hidden -z-10", className)}>
       {enableMesh && (
-        <canvas 
-          ref={canvasRef}
-          className="absolute inset-0 w-full h-full"
-          style={{ willChange: 'transform' }}
-        />
+        <>
+          <canvas 
+            ref={canvasRef}
+            className="absolute inset-0 w-full h-full"
+            style={{ willChange: 'transform' }}
+          />
+          <div 
+            className="mesh-grid absolute inset-0 w-full h-full opacity-30" 
+            style={{ 
+              backgroundSize: `${gridSize}px ${gridSize}px`,
+              willChange: 'background-color'
+            }} 
+          />
+        </>
       )}
       
       {isClient && enableParticles && particles.map(particle => (
