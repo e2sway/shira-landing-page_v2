@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "cleanUrls": true,
+  "framework": "nextjs",
+  "github": {
+    "silent": true
+  }
+} 
