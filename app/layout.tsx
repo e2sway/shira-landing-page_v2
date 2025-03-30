@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import { Footer } from '@/components/Footer'
+import { SmoothScroll } from '@/components/SmoothScroll'
 
 // Configure Inter font
 const inter = Inter({ subsets: ['latin'] })
@@ -27,9 +28,11 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body className={`${inter.className} bg-[#181818] text-white antialiased overflow-x-hidden min-h-screen relative`}>
-        {children}
+        <SmoothScroll>
+          {children}
+          <Footer />
+        </SmoothScroll>
         <Analytics />
-        <Footer />
       </body>
     </html>
   )
