@@ -34,7 +34,8 @@ export function ScrollTextReveal({
   direction = 'up',
   delay = 0
 }: ScrollTextRevealProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  // Using RefObject<Element> for broader compatibility with any HTML element
+  const containerRef = useRef<HTMLElement>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   
@@ -94,34 +95,57 @@ export function ScrollTextReveal({
     };
   }, [isMounted, markers, threshold]);
   
-  // To prevent hydration errors, we need to be consistent in our rendering
-  // We'll use the same component structure whether on server or client
-  const Tag = tag;
+  // Get animation properties
   const { initial, animate } = getAnimationProps();
   
   // Server-side safe animation props
   const animationProps = {
-    initial: isMounted ? initial : false, // Don't apply initial animation on server
-    animate: isMounted ? (isVisible ? animate : initial) : false, // Don't animate on server
+    initial: isMounted ? initial : false, 
+    animate: isMounted ? (isVisible ? animate : initial) : false,
     transition: {
       duration: duration,
       delay: delay,
-      ease: [0.25, 0.1, 0.25, 1.0], // cubic-bezier easing
+      ease: [0.25, 0.1, 0.25, 1.0],
     }
   };
   
+  // Create a component that matches the desired tag
+  const Component = tag as keyof JSX.IntrinsicElements;
+  
+  // Special handling for <p> tags to avoid nesting divs inside them (which causes hydration errors)
+  if (tag === 'p') {
+    return (
+      <div ref={containerRef as React.RefObject<HTMLDivElement>} className="contents">
+        {isMounted ? (
+          <motion.p 
+            className={className}
+            {...animationProps}
+          >
+            {children}
+          </motion.p>
+        ) : (
+          <p className={className}>
+            {children}
+          </p>
+        )}
+      </div>
+    );
+  }
+  
+  // For all other tags, we can use the normal approach
   return (
-    <Tag ref={containerRef} className={className}>
-      {isMounted ? (
-        <motion.div {...animationProps} className="w-full">
-          {children}
-        </motion.div>
-      ) : (
-        // On server, render without animation wrapper
-        <div className="w-full">
-          {children}
-        </div>
-      )}
-    </Tag>
+    <div ref={containerRef as React.RefObject<HTMLDivElement>} className="contents">
+      <Component className={className}>
+        {isMounted ? (
+          <motion.div {...animationProps} className="w-full">
+            {children}
+          </motion.div>
+        ) : (
+          <div className="w-full">
+            {children}
+          </div>
+        )}
+      </Component>
+    </div>
   );
 } 
