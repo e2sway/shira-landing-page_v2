@@ -34,7 +34,6 @@ export function ScrollTextReveal({
   direction = 'up',
   delay = 0
 }: ScrollTextRevealProps) {
-  // Using a div ref type for simplicity
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -77,7 +76,7 @@ export function ScrollTextReveal({
     }
   };
   
-  // Set up the scroll trigger
+  // Set up the scroll trigger using a ref to track visibility
   useEffect(() => {
     if (!isMounted || !containerRef.current) return;
     
@@ -95,58 +94,126 @@ export function ScrollTextReveal({
     };
   }, [isMounted, markers, threshold]);
   
-  // Get animation properties
+  // Animation config
   const { initial, animate } = getAnimationProps();
-  
-  // Prepare animation props but don't use them on server
-  const animationProps = isMounted ? {
-    initial: initial,
-    animate: isVisible ? animate : initial,
+  const animConfig = {
+    initial: isMounted ? initial : undefined,
+    animate: isMounted && isVisible ? animate : initial,
     transition: {
-      duration: duration,
-      delay: delay,
-      ease: [0.25, 0.1, 0.25, 1.0],
+      duration,
+      delay,
+      ease: [0.25, 0.1, 0.25, 1.0]
     }
-  } : {};
-  
-  // Simplify the implementation to avoid TypeScript issues with motion components
-  
-  // For paragraph tags
-  if (tag === 'p') {
-    return (
-      <div ref={containerRef} className="contents">
-        <p className={className}>
-          {isMounted ? (
-            <motion.span
-              {...animationProps}
-              className="inline-block w-full"
-            >
-              {children}
-            </motion.span>
-          ) : (
-            children
-          )}
-        </p>
-      </div>
-    );
-  }
-  
-  // For all other tags
-  const Tag = tag as keyof JSX.IntrinsicElements;
-  return (
-    <div ref={containerRef} className="contents">
-      <Tag className={className}>
-        {isMounted ? (
-          <motion.div 
-            {...animationProps}
-            className="w-full"
-          >
+  };
+
+  // Create a wrapper div for the scroll trigger
+  // This prevents invalid nesting issues
+  const scrollTriggerWrapper = (content: React.ReactNode) => (
+    <div ref={containerRef} className="contents" style={{ display: 'contents' }}>
+      {content}
+    </div>
+  );
+
+  // Handle each tag type separately to avoid invalid nesting
+  switch (tag) {
+    case 'p':
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.p className={className} {...animConfig}>
+            {children}
+          </motion.p>
+        ) : (
+          <p className={className}>{children}</p>
+        )
+      );
+    
+    case 'h1':
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.h1 className={className} {...animConfig}>
+            {children}
+          </motion.h1>
+        ) : (
+          <h1 className={className}>{children}</h1>
+        )
+      );
+    
+    case 'h2':
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.h2 className={className} {...animConfig}>
+            {children}
+          </motion.h2>
+        ) : (
+          <h2 className={className}>{children}</h2>
+        )
+      );
+    
+    case 'h3':
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.h3 className={className} {...animConfig}>
+            {children}
+          </motion.h3>
+        ) : (
+          <h3 className={className}>{children}</h3>
+        )
+      );
+    
+    case 'h4':
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.h4 className={className} {...animConfig}>
+            {children}
+          </motion.h4>
+        ) : (
+          <h4 className={className}>{children}</h4>
+        )
+      );
+    
+    case 'h5':
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.h5 className={className} {...animConfig}>
+            {children}
+          </motion.h5>
+        ) : (
+          <h5 className={className}>{children}</h5>
+        )
+      );
+    
+    case 'h6':
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.h6 className={className} {...animConfig}>
+            {children}
+          </motion.h6>
+        ) : (
+          <h6 className={className}>{children}</h6>
+        )
+      );
+    
+    case 'span':
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.span className={className} {...animConfig}>
+            {children}
+          </motion.span>
+        ) : (
+          <span className={className}>{children}</span>
+        )
+      );
+    
+    // Default case (div)
+    default:
+      return scrollTriggerWrapper(
+        isMounted ? (
+          <motion.div className={className} {...animConfig}>
             {children}
           </motion.div>
         ) : (
-          children
-        )}
-      </Tag>
-    </div>
-  );
+          <div className={className}>{children}</div>
+        )
+      );
+  }
 } 
