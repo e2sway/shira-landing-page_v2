@@ -170,7 +170,7 @@ export function ImageCarousel({
           animate="center"
           exit="exit"
           transition={getTransitionSettings()}
-          className="absolute inset-0 z-10"
+          className="absolute inset-0 z-[1]"
           style={{ willChange: 'transform, opacity' }}
         >
           <motion.div

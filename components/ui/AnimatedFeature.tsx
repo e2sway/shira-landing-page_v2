@@ -34,35 +34,24 @@ export function AnimatedFeature({
         y: -5,
         transition: { duration: 0.2 }
       }}
-      className="glass-card p-6 relative overflow-hidden group"
+      className="bg-[#222222] border border-[#333333] shadow-md p-6 rounded-lg relative overflow-hidden group"
     >
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#8A80F9]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      {/* Background gradient on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#5A51E1]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
-      {/* Shimmer effect overlay */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 animate-shimmer transition-opacity duration-300" />
-      
-      {/* Border gradient */}
-      <div className="absolute inset-0 rounded-xl neon-border opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      {/* Border highlight on hover */}
+      <div className="absolute inset-0 rounded-lg border border-[#5A51E1]/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
       
       {/* Icon with glow effect */}
       <motion.div 
-        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#8A80F9]/10 text-[#8A80F9] mb-4 relative"
+        className="flex items-center justify-center w-12 h-12 rounded-full bg-[#2a2a2a] mb-4 relative"
         whileHover={{
           scale: 1.1,
           transition: { duration: 0.2 }
         }}
       >
-        {/* Icon glow */}
-        <div className="absolute inset-0 rounded-full animate-pulse-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        
-        {/* Rotating gradient border */}
-        <div className="absolute inset-[-1px] rounded-full overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-gradient-to-r from-[#8A80F9] via-[#5A51E1] to-[#8A80F9] opacity-30 group-hover:opacity-70 transition-opacity duration-500 animate-gradient-shift"
-            style={{ backgroundSize: '200% 200%' }}
-          />
-        </div>
+        {/* Subtle border */}
+        <div className="absolute inset-0 rounded-full border border-[#5A51E1]/20 group-hover:border-[#5A51E1]/40 transition-colors duration-300" />
         
         <motion.div
           animate={{
@@ -88,10 +77,10 @@ export function AnimatedFeature({
           whileHover={{ opacity: 1 }}
           transition={{ duration: 0.2 }}
         >
-          <span className="relative group-hover:neon-text transition-all duration-300">
+          <span className="relative transition-all duration-300">
             {title}
             <motion.span 
-              className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#8A80F9] group-hover:w-full transition-all duration-500"
+              className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#5A51E1] group-hover:w-full transition-all duration-500"
               initial={{ width: 0 }}
               whileInView={{ width: "100%" }}
               transition={{ delay: delay + 0.5, duration: 0.5 }}
@@ -111,7 +100,7 @@ export function AnimatedFeature({
         whileHover={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <svg viewBox="0 0 100 100" className="w-full h-full text-[#8A80F9]/20">
+        <svg viewBox="0 0 100 100" className="w-full h-full text-[#5A51E1]/20">
           <path d="M0,0 L100,100 L100,0 L0,0" fill="currentColor" />
         </svg>
       </motion.div>

@@ -29,40 +29,47 @@ export function GradientInput({
 
   return (
     <div className={`relative ${className}`}>
-      {/* Animated gradient border */}
-      <motion.div 
-        className="absolute inset-0 rounded-xl"
-        style={{
-          background: 'linear-gradient(225deg, rgba(138, 128, 249, 0.5) 0%, rgba(82, 71, 205, 0.5) 100%)',
-          zIndex: 0,
-        }}
-        animate={{ 
-          opacity: isFocused ? 1 : 0.3,
-          scale: isFocused ? 1 : 0.98,
-        }}
-        transition={{ duration: 0.3 }}
+      {/* More visible border for unfocused state */}
+      <div 
+        className="absolute inset-0 rounded-xl border-2 border-[#333333]"
+        style={{ zIndex: 0 }}
       />
       
-      {/* Outer glow effect */}
+      {/* Purple gradient border - only visible when focused */}
       <motion.div 
-        className="absolute inset-0 rounded-xl"
-        style={{
-          boxShadow: '0 0 20px 2px rgba(138, 128, 249, 0.3)',
-          zIndex: 0,
-        }}
+        className="absolute inset-0 rounded-xl overflow-hidden"
+        initial={{ opacity: 0 }}
         animate={{ 
           opacity: isFocused ? 1 : 0,
         }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
+        style={{
+          background: 'linear-gradient(225deg, rgba(90, 81, 225, 0.7) 0%, rgba(110, 101, 231, 0.7) 100%)',
+          zIndex: isFocused ? 1 : 0,
+        }}
       />
       
-      {/* Input container */}
-      <div className="relative flex items-center gap-3 rounded-xl backdrop-blur-xl p-1 z-10">
+      {/* Outer glow effect - only visible when focused */}
+      <motion.div 
+        className="absolute inset-0 rounded-xl"
+        initial={{ opacity: 0 }}
+        animate={{ 
+          opacity: isFocused ? 0.8 : 0 
+        }}
+        transition={{ duration: 0.3 }}
+        style={{
+          boxShadow: '0 0 15px 2px rgba(90, 81, 225, 0.3)',
+          zIndex: isFocused ? 1 : 0,
+        }}
+      />
+      
+      {/* Input container - with subtle shadow for depth */}
+      <div className="relative flex items-center gap-3 rounded-xl p-1 z-10">
         <div 
-          className={`flex items-center gap-3 w-full rounded-lg px-4 py-3 transition-colors
+          className={`flex items-center gap-3 w-full rounded-lg px-4 py-3 transition-all duration-300
             ${isFocused 
-              ? 'bg-white/10 text-white' 
-              : 'bg-white/5 text-white/70'
+              ? 'bg-[#2a2a2a] text-white shadow-lg' 
+              : 'bg-[#222222] text-white/90 shadow-md'
             }`}
         >
           {/* Icon */}
@@ -70,7 +77,7 @@ export function GradientInput({
             <motion.div
               animate={{
                 scale: isFocused ? 1.1 : 1,
-                color: isFocused ? '#8A80F9' : 'rgba(255, 255, 255, 0.7)',
+                color: isFocused ? '#5A51E1' : 'rgba(255, 255, 255, 0.8)',
               }}
               transition={{ duration: 0.2 }}
               className="flex-shrink-0"
@@ -91,11 +98,11 @@ export function GradientInput({
             onChange={onChange}
           />
           
-          {/* Button */}
+          {/* Button - full height to match input */}
           {buttonText && onButtonClick && (
             <button
               onClick={onButtonClick}
-              className="bg-gradient-to-r from-[#8A80F9] to-[#A78BFA] text-white px-4 py-2 rounded-lg font-medium text-sm hover:shadow-lg transition duration-300 hover:brightness-110 hover:scale-[1.03]"
+              className="bg-gradient-to-r from-[#5A51E1] to-[#6E65E7] text-white px-4 h-full -my-3 rounded-lg font-medium text-sm hover:shadow-lg transition duration-300 hover:brightness-110 hover:scale-[1.03] flex items-center justify-center"
             >
               {buttonText}
             </button>
