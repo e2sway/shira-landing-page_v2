@@ -2,7 +2,7 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { MessageCircle, Globe2, Brain, Trophy, ChevronRight, Mail } from 'lucide-react'
+import { MessageCircle, Globe2, Brain, Trophy, ChevronRight, Mail, Mic, Volume2, CheckCircle, Clock } from 'lucide-react'
 import { ImageCarousel } from "@/components/ImageCarousel"
 import { GradientButton } from "@/components/ui/GradientButton"
 import { useEmailSubmission } from '@/lib/hooks/useEmailSubmission'
@@ -12,7 +12,6 @@ import { AnimatedFeature } from '@/components/ui/AnimatedFeature'
 import { GradientInput } from '@/components/ui/GradientInput'
 import { ModernIPhoneMockup } from "@/components/ModernIPhoneMockup"
 import { ScrollTextReveal } from '@/components/ui/ScrollTextReveal'
-import { ScrollProgressBar } from '@/components/ui/ScrollProgressBar'
 
 export default function Home() {
   const [email, setEmail] = useState('')
@@ -37,7 +36,6 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-[#181818] overflow-x-hidden">
       <Toaster position="top-center" />
-      {isMounted && <ScrollProgressBar color="#8A80F9" height={3} />}
       
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center pt-16 md:pt-safe pb-16">
@@ -52,9 +50,8 @@ export default function Home() {
                     <ModernIPhoneMockup 
                       color="space-black" 
                       variant="iPhone15Pro" 
-                      performanceMode={false} 
-                      slideFrom="left" 
-                      parallaxStrength={0.15}
+                      performanceMode={true}
+                      parallaxStrength={0}
                       interactiveDynamicIsland={false}
                       hideNotch={false}
                     >
@@ -128,7 +125,7 @@ export default function Home() {
       </section>
       
       {/* Key Benefits Section */}
-      <section className="relative py-24 overflow-hidden">
+      <section className="relative py-24 overflow-hidden border-t border-[#333333]">
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="text-center mb-16">
             <ScrollTextReveal 
@@ -141,10 +138,41 @@ export default function Home() {
             </ScrollTextReveal>
           </div>
           
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Features - Left Side */}
-            <div>
-              <div className="grid sm:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
+            {/* Phone Mockup - LEFT SIDE */}
+            <div className="order-1 mb-8 md:mb-0 md:order-1 min-h-[600px] relative">
+              <div className="flex justify-center mx-auto max-w-sm w-full">
+                <div className="relative max-w-[300px] w-full h-[600px]">
+                  <div className="absolute -inset-16 bg-gradient-to-r from-[#5A51E1]/5 to-[#8A80F9]/5 rounded-full blur-3xl opacity-50"></div>
+                  <div className="relative group z-10 h-full w-full transform-gpu">
+                    <ModernIPhoneMockup 
+                      color="space-black" 
+                      variant="iPhone15Pro" 
+                      performanceMode={true}
+                      parallaxStrength={0}
+                      interactiveDynamicIsland={false}
+                      hideNotch={false}
+                    >
+                      <div className="relative w-full h-full bg-black overflow-hidden">
+                        <Image
+                          src="/assets/screenshot7.png"
+                          alt="App feature showcase"
+                          fill
+                          priority
+                          className="object-cover object-center scale-[1.03]"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+                      </div>
+                    </ModernIPhoneMockup>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Features - RIGHT SIDE */}
+            <div className="order-2 md:order-2">
+              <div className="grid sm:grid-cols-2 gap-6">
                 <AnimatedFeature
                   icon={<MessageCircle className="w-6 h-6 text-[#5A51E1]" />}
                   title="Learn through real-life conversations"
@@ -174,34 +202,86 @@ export default function Home() {
                 />
               </div>
             </div>
-
-            {/* Phone Mockup - Right Side */}
-            <div className="flex justify-center lg:justify-end pt-8 lg:pt-0">
-              <div className="relative max-w-[300px] w-full h-[600px]">
-                <div className="absolute -inset-16 bg-gradient-to-r from-[#5A51E1]/5 to-[#8A80F9]/5 rounded-full blur-3xl opacity-50"></div>
-                <div className="relative group z-10 h-full w-full transform-gpu">
-                  <ModernIPhoneMockup 
-                    color="space-black" 
-                    variant="iPhone15Pro" 
-                    performanceMode={false} 
-                    slideFrom="right" 
-                    parallaxStrength={0.25}
-                    interactiveDynamicIsland={false}
-                    hideNotch={false}
-                  >
-                    <div className="relative w-full h-full bg-black overflow-hidden">
-                      <Image
-                        src="/assets/screenshot7.png"
-                        alt="App feature showcase"
-                        fill
-                        priority
-                        className="object-cover object-center scale-[1.03]"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
-                    </div>
-                  </ModernIPhoneMockup>
+          </div>
+        </div>
+      </section>
+      
+      {/* Real-time Conversations Section */}
+      <section className="relative py-24 overflow-hidden border-t border-[#333333]">
+        <div className="container mx-auto px-4 md:px-6 relative z-10">
+          <div className="text-center mb-16">
+            <ScrollTextReveal 
+              tag="div"
+              className="flex flex-col items-center"
+              stagger={0.08}
+            >
+              <span className="text-sm font-semibold text-[#8A80F9] mb-2 block uppercase tracking-wide">INTERACTIVE PRACTICE</span>
+              <h2 className="text-4xl md:text-5xl font-bold gradient-text animate-text-shimmer">Have Real-time Conversations</h2>
+            </ScrollTextReveal>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-center">
+            {/* Phone Mockup - LEFT SIDE */}
+            <div className="order-1 mb-8 md:mb-0 md:order-1 min-h-[600px] relative">
+              <div className="flex justify-center mx-auto max-w-sm w-full">
+                <div className="relative max-w-[300px] w-full h-[600px]">
+                  <div className="absolute -inset-16 bg-gradient-to-r from-[#5A51E1]/5 to-[#8A80F9]/5 rounded-full blur-3xl opacity-50"></div>
+                  <div className="relative group z-10 h-full w-full transform-gpu">
+                    <ModernIPhoneMockup 
+                      color="space-black" 
+                      variant="iPhone15Pro" 
+                      performanceMode={true}
+                      parallaxStrength={0}
+                      interactiveDynamicIsland={false}
+                      hideNotch={false}
+                    >
+                      <div className="relative w-full h-full bg-black overflow-hidden">
+                        <Image
+                          src="/assets/screenshot3.png"
+                          alt="Real-time conversation interface"
+                          fill
+                          priority
+                          className="object-cover object-center scale-[1.03]"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+                      </div>
+                    </ModernIPhoneMockup>
+                  </div>
                 </div>
+              </div>
+            </div>
+            
+            {/* Features - RIGHT SIDE */}
+            <div className="order-2 md:order-2">
+              <div className="grid sm:grid-cols-2 gap-6">
+                <AnimatedFeature
+                  icon={<Mic className="w-6 h-6 text-[#5A51E1]" />}
+                  title="Guided Real-Time Conversations"
+                  description="Practice speaking in authentic scenarios with AI guidance that adapts to your proficiency level"
+                  delay={0.2}
+                />
+                
+                <AnimatedFeature
+                  icon={<Volume2 className="w-6 h-6 text-[#5A51E1]" />}
+                  title="Natural Pronunciation Model"
+                  description="Listen to native-speaker audio to master authentic pronunciation and intonation"
+                  delay={0.3}
+                />
+                
+                <AnimatedFeature
+                  icon={<CheckCircle className="w-6 h-6 text-[#5A51E1]" />}
+                  title="Instant Feedback System"
+                  description="Receive personalized feedback on your pronunciation and grammar to improve with every conversation"
+                  delay={0.4}
+                />
+                
+                <AnimatedFeature
+                  icon={<Clock className="w-6 h-6 text-[#5A51E1]" />}
+                  title="Endless Conversational Flow"
+                  description="Engage in conversations that can continue as long as you want, with no time limits or artificial endings"
+                  delay={0.5}
+                />
               </div>
             </div>
           </div>
@@ -209,7 +289,7 @@ export default function Home() {
       </section>
 
       {/* Final CTA */}
-      <section className="relative py-24">
+      <section className="relative py-24 border-t border-[#333333]">
         <div className="container mx-auto px-4 md:px-6 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <ScrollTextReveal
